@@ -1,6 +1,8 @@
-  //Ensure jquery is loaded
-if ( typeof jQuery === 'undefined' )
-  alert("Spokes Error: jQuery must be loaded before spokes Javascript");
+function getJSON(url, callback) {
+  fetch(url)
+  .then(res => res.json())
+  .then(json => callback(json));
+}
 
   //Compresses an array of queue items down to a single number
 function compressQueueList( queue )
@@ -81,7 +83,7 @@ Device.prototype.attach = function( uid, callback )
 
     //Register a session
   local = this;
-  $.getJSON(this.Path + "/DeviceServices/Attach?uid="+ uid +"&callback=?", 
+  getJSON(this.Path + "/DeviceServices/Attach?uid="+ uid +"&callback=?", 
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -118,7 +120,7 @@ Device.prototype.release = function( callback )
 
   local = this;
     //Release a session
-  $.getJSON(this.Path+"/DeviceServices/Release?sess="+ this.Sess_Id +"&callback=?",
+  getJSON(this.Path+"/DeviceServices/Release?sess="+ this.Sess_Id +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -152,7 +154,7 @@ Device.prototype.deviceInfo = function( callback )
 
     //Register a session
   local = this;
-  $.getJSON(this.Path+"/DeviceServices/Info?callback=?",
+  getJSON(this.Path+"/DeviceServices/Info?callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -180,7 +182,7 @@ Device.prototype.atdMobileCallerId = function( callback )
   var action = new SpokesAction( callback );
   SpokesAction.Action_List.unshift( action );
 
-  $.getJSON(this.Path + "/DeviceServices/ATDMobileCallerId?sess=" + this.Sess_Id + "&callback=?", 
+  getJSON(this.Path + "/DeviceServices/ATDMobileCallerId?sess=" + this.Sess_Id + "&callback=?", 
             function(data)
             { 
               //Create a nice object, and ensure its of the right type
@@ -205,7 +207,7 @@ Device.prototype.proximity = function(enabled, callback )
   var action = new SpokesAction( callback );
   SpokesAction.Action_List.unshift( action );
 
-  $.getJSON(this.Path + "/DeviceServices/Proximity?sess=" + this.Sess_Id + "&enabled=" + enabled + "&callback=?", 
+  getJSON(this.Path + "/DeviceServices/Proximity?sess=" + this.Sess_Id + "&enabled=" + enabled + "&callback=?", 
             function(data)
             { 
               //Create a nice object, and ensure its of the right type
@@ -244,7 +246,7 @@ Device.prototype.events = function( queue, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path+"/DeviceServices/Events?sess="+ this.Sess_Id +"&queue="+ queue +"&callback=?",
+  getJSON(this.Path+"/DeviceServices/Events?sess="+ this.Sess_Id +"&queue="+ queue +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -295,7 +297,7 @@ Device.prototype.ring = function( enabled, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path+"/DeviceServices/Ring?enabled="+ enabled +
+  getJSON(this.Path+"/DeviceServices/Ring?enabled="+ enabled +
                                           "&callback=?",
             function(data)
             { 
@@ -328,7 +330,7 @@ Device.prototype.audioState = function( state, callback )
   state = SpokesAudioType.Lookup[state];
 
     //Register a session
-  $.getJSON(this.Path+"/DeviceServices/AudioState?state="+ state +
+  getJSON(this.Path+"/DeviceServices/AudioState?state="+ state +
                                           "&callback=?",
             function(data)
             { 
@@ -356,7 +358,7 @@ Device.prototype.getEventRegistry = function( callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/GetRegistry?sess="+ this.Sess_Id +"&callback=?",
+  getJSON(this.Path + "/EventManager/GetRegistry?sess="+ this.Sess_Id +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -384,7 +386,7 @@ Device.prototype.setEventRegistry = function (queue, callback)
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/SetRegistry?sess="+ this.Sess_Id +"&queue=" + queue +
+  getJSON(this.Path + "/EventManager/SetRegistry?sess="+ this.Sess_Id +"&queue=" + queue +
                                             "&callback=?",
             function(data)
             { 
@@ -413,7 +415,7 @@ Device.prototype.addEventRegistry = function (queue, callback)
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/AddRegistry?sess="+ this.Sess_Id +"&queue=" + queue +
+  getJSON(this.Path + "/EventManager/AddRegistry?sess="+ this.Sess_Id +"&queue=" + queue +
                                             "&callback=?",
             function(data)
             { 
@@ -442,7 +444,7 @@ Device.prototype.removeEventRegistry = function (queue, callback)
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/RemoveRegistry?sess="+ this.Sess_Id +"&queue=" + queue +
+  getJSON(this.Path + "/EventManager/RemoveRegistry?sess="+ this.Sess_Id +"&queue=" + queue +
                                             "&callback=?",
             function(data)
             { 
@@ -468,7 +470,7 @@ Device.prototype.setGlobalTTL = function( ttl, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/GlobalTTL?sess="+ this.Sess_Id +"&ttl="+ ttl +
+  getJSON(this.Path + "/EventManager/GlobalTTL?sess="+ this.Sess_Id +"&ttl="+ ttl +
                                             "&callback=?",
             function(data)
             { 
@@ -494,7 +496,7 @@ Device.prototype.setGlobalMaxEvents = function( max, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/GlobalMaxCount?sess="+ this.Sess_Id +"&max="+ max +
+  getJSON(this.Path + "/EventManager/GlobalMaxCount?sess="+ this.Sess_Id +"&max="+ max +
                                             "&callback=?",
             function(data)
             { 
@@ -524,7 +526,7 @@ Device.prototype.setQueueTTL = function( queue, ttl, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/TTL?sess="+ this.Sess_Id +"&queue="+ queue +
+  getJSON(this.Path + "/EventManager/TTL?sess="+ this.Sess_Id +"&queue="+ queue +
                                             "&ttl="+ ttl +
                                             "&callback=?",
             function(data)
@@ -554,7 +556,7 @@ Device.prototype.setQueueMaxEvents = function( queue, max, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/EventManager/MaxCount?sess="+ this.Sess_Id +"&queue="+ queue +
+  getJSON(this.Path + "/EventManager/MaxCount?sess="+ this.Sess_Id +"&queue="+ queue +
                                             "&max="+ max +
                                             "&callback=?",
             function(data)
@@ -844,7 +846,7 @@ Plugin.prototype.pluginList = function( callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path+"/SessionManager/PluginList?callback=?",
+  getJSON(this.Path+"/SessionManager/PluginList?callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -869,7 +871,7 @@ Plugin.prototype.register = function( name, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path+"/SessionManager/Register?name="+ name +"&callback=?",
+  getJSON(this.Path+"/SessionManager/Register?name="+ name +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -894,7 +896,7 @@ Plugin.prototype.unRegister = function( name, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path+"/SessionManager/UnRegister?name="+ name +"&callback=?",
+  getJSON(this.Path+"/SessionManager/UnRegister?name="+ name +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -919,7 +921,7 @@ Plugin.prototype.isActive = function( name, active, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path+"/SessionManager/IsActive?name="+ name +
+  getJSON(this.Path+"/SessionManager/IsActive?name="+ name +
                 "&active="+ active +
                 "&callback=?",
             function(data)
@@ -948,7 +950,7 @@ Plugin.prototype.callManagerState = function(callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/CallManagerState?callback=?",
+  getJSON(this.Path + "/CallServices/CallManagerState?callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -972,7 +974,7 @@ Plugin.prototype.sessionEvents = function(callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/Events?callback=?",
+  getJSON(this.Path + "/CallServices/Events?callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -996,7 +998,7 @@ Plugin.prototype.sessionCallEvents = function( name, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/SessionManagerCallEvents?name="+ name +"&callback=?",
+  getJSON(this.Path + "/CallServices/SessionManagerCallEvents?name="+ name +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -1021,7 +1023,7 @@ Plugin.prototype.callEvents = function( name, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/CallEvents?name="+ name +"&callback=?",
+  getJSON(this.Path + "/CallServices/CallEvents?name="+ name +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -1046,7 +1048,7 @@ Plugin.prototype.callRequests = function( name, callback )
   SpokesAction.Action_List.unshift( action );
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/CallRequests?name="+  name +"&callback=?",
+  getJSON(this.Path + "/CallServices/CallRequests?name="+  name +"&callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -1076,7 +1078,7 @@ Plugin.prototype.incomingCall = function( name, callID, contact, tones, route, c
   callID = JSON.stringify(callID); 
   contact = JSON.stringify(contact); 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/IncomingCall?name=" + name + 
+  getJSON(this.Path + "/CallServices/IncomingCall?name=" + name + 
                                             "&callID=" + callID +
                                             "&contact="+ contact +
                                             "&tones="+ tones +
@@ -1112,7 +1114,7 @@ Plugin.prototype.outgoingCall = function( name, callID, contact,  route, callbac
   contact = JSON.stringify(contact); 
   
     //Register a session
-  $.getJSON(this.Path + "/CallServices/OutgoingCall?name=" + name +
+  getJSON(this.Path + "/CallServices/OutgoingCall?name=" + name +
                                             "&callID=" + callID +
                                             "&contact="+ contact +
                                             "&route="+ route +
@@ -1146,7 +1148,7 @@ Plugin.prototype.terminateCall = function( name, callID, callback )
   callID = JSON.stringify(callID); 
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/TerminateCall?name=" + name + 
+  getJSON(this.Path + "/CallServices/TerminateCall?name=" + name + 
                                             "&callID=" + callID +
                                             "&callback=?",
             function(data)
@@ -1178,7 +1180,7 @@ Plugin.prototype.answerCall = function( name, callID, callback )
   callID = JSON.stringify(callID); 
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/AnswerCall?name=" + name +
+  getJSON(this.Path + "/CallServices/AnswerCall?name=" + name +
                                             "&callID=" + callID +
                                             "&callback=?",
             function(data)
@@ -1210,7 +1212,7 @@ Plugin.prototype.holdCall = function( name, callID, callback )
   callID = JSON.stringify(callID); 
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/HoldCall?name=" + name +
+  getJSON(this.Path + "/CallServices/HoldCall?name=" + name +
                                             "&callID=" + callID +
                                             "&callback=?",
             function(data)
@@ -1242,7 +1244,7 @@ Plugin.prototype.resumeCall = function( name, callID, callback )
   callID = JSON.stringify(callID); 
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/ResumeCall?name=" + name +
+  getJSON(this.Path + "/CallServices/ResumeCall?name=" + name +
                                             "&callID=" + callID +
                                             "&callback=?",
             function(data)
@@ -1270,7 +1272,7 @@ Plugin.prototype.muteCall = function( name, muted, callback )
   SpokesAction.Action_List.unshift( action );
   
     //Register a session
-  $.getJSON(this.Path + "/CallServices/MuteCall?name=" + name +
+  getJSON(this.Path + "/CallServices/MuteCall?name=" + name +
                                             "&muted=" + muted +
                                             "&callback=?",
             function(data)
@@ -1303,7 +1305,7 @@ Plugin.prototype.insertCall = function( name, callID, contact, callback )
   contact = JSON.stringify(contact); 
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/InsertCall?name=" + name +
+  getJSON(this.Path + "/CallServices/InsertCall?name=" + name +
                                             "&callID=" + callID +
                                             "&contact=" + contact +
                                             "&callback=?",
@@ -1336,7 +1338,7 @@ Plugin.prototype.setAudioRoute = function( name, callID, route, callback )
   callID = JSON.stringify(callID); 
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/SetAudioRoute?name=" + name + 
+  getJSON(this.Path + "/CallServices/SetAudioRoute?name=" + name + 
                                             "&callID=" + callID +
                                             "&route=" + route +
                                             "&callback=?",
@@ -1369,7 +1371,7 @@ Plugin.prototype.setConferenceId = function( name, callID, callback )
   callID = JSON.stringify(callID); 
 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/SetConferenceId?name=" + name +
+  getJSON(this.Path + "/CallServices/SetConferenceId?name=" + name +
                                             "&callID=" + callID +
                                             "&callback=?",
             function(data)
@@ -1400,7 +1402,7 @@ Plugin.prototype.makeCall = function( name, contact, callback )
   
   contact = JSON.stringify(contact); 
     //Register a session
-  $.getJSON(this.Path + "/CallServices/MakeCall?name=" + name +
+  getJSON(this.Path + "/CallServices/MakeCall?name=" + name +
                                             "&contact=" + contact +
                                             "&callback=?",
             function(data)
@@ -1443,7 +1445,7 @@ UserPreference.prototype.getDefaultSoftphone = function (callback)
   SpokesAction.Action_List.unshift( action );
 
   
-  $.getJSON(this.Path + "/UserPreference/GetDefaultSoftPhone?callback=?",
+  getJSON(this.Path + "/UserPreference/GetDefaultSoftPhone?callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -1467,7 +1469,7 @@ UserPreference.prototype.getEscalateToVoiceSoftPhone = function (callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/GetEscalateToVoiceSoftPhone?callback=?",
+    getJSON(this.Path + "/UserPreference/GetEscalateToVoiceSoftPhone?callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1491,7 +1493,7 @@ UserPreference.prototype.getMediaPlayerActionIncomingCall = function (callback)
   SpokesAction.Action_List.unshift( action );
 
 
-  $.getJSON(this.Path + "/UserPreference/GetMediaPlayerActionIncomingCall?callback=?",
+  getJSON(this.Path + "/UserPreference/GetMediaPlayerActionIncomingCall?callback=?",
             function(data)
             { 
                 //Create a nice object, and ensure its of the right type
@@ -1515,7 +1517,7 @@ UserPreference.prototype.getMediaPlayerActionEndedCall = function (callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/GetMediaPlayerActionEndedCall?callback=?",
+    getJSON(this.Path + "/UserPreference/GetMediaPlayerActionEndedCall?callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1538,7 +1540,7 @@ UserPreference.prototype.getAutoPresence = function (callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/GetAutoPresence?callback=?",
+    getJSON(this.Path + "/UserPreference/GetAutoPresence?callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1561,7 +1563,7 @@ UserPreference.prototype.getDoffAction = function (callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/GetDoffAction?callback=?",
+    getJSON(this.Path + "/UserPreference/GetDoffAction?callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1584,7 +1586,7 @@ UserPreference.prototype.getDonAction = function (callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/GetDonAction?callback=?",
+    getJSON(this.Path + "/UserPreference/GetDonAction?callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1607,7 +1609,7 @@ UserPreference.prototype.getKeepLinkUp = function (callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/GetKeepLinkUp?callback=?",
+    getJSON(this.Path + "/UserPreference/GetKeepLinkUp?callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1630,7 +1632,7 @@ UserPreference.prototype.getRingPCAndHS = function (callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/GetRingPCAndHS?callback=?",
+    getJSON(this.Path + "/UserPreference/GetRingPCAndHS?callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1653,7 +1655,7 @@ UserPreference.prototype.setDefaultSoftphone = function (name, callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetDefaultSoftPhone?name="+ name + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetDefaultSoftPhone?name="+ name + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1676,7 +1678,7 @@ UserPreference.prototype.setEscalateToVoiceSoftPhone = function (name, callback)
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetEscalateToVoiceSoftPhone?name=" + name + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetEscalateToVoiceSoftPhone?name=" + name + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1699,7 +1701,7 @@ UserPreference.prototype.setMediaPlayerActionIncomingCall = function (actionInco
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetMediaPlayerActionIncomingCall?actionIncoming=" + actionIncoming + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetMediaPlayerActionIncomingCall?actionIncoming=" + actionIncoming + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1722,7 +1724,7 @@ UserPreference.prototype.setMediaPlayerActionEndedCall = function (actionEnded, 
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetMediaPlayerActionEndedCall?actionEnded=" + actionEnded + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetMediaPlayerActionEndedCall?actionEnded=" + actionEnded + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1745,7 +1747,7 @@ UserPreference.prototype.setAutoPresence = function (autoPresence, callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetAutoPresence?autoPresence=" + autoPresence + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetAutoPresence?autoPresence=" + autoPresence + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1768,7 +1770,7 @@ UserPreference.prototype.setDoffAction = function (doffAction, callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetDoffAction?doffAction=" + doffAction + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetDoffAction?doffAction=" + doffAction + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1791,7 +1793,7 @@ UserPreference.prototype.setDonAction = function (donAction, callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetDonAction?donAction=" + donAction + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetDonAction?donAction=" + donAction + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1814,7 +1816,7 @@ UserPreference.prototype.setKeepLinkUp = function (keepLinkUp, callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetKeepLinkUp?keepLinkUp=" + keepLinkUp + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetKeepLinkUp?keepLinkUp=" + keepLinkUp + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
@@ -1837,7 +1839,7 @@ UserPreference.prototype.setRingPCAndHS = function (ringPcAndHS, callback) {
     SpokesAction.Action_List.unshift(action);
 
 
-    $.getJSON(this.Path + "/UserPreference/SetRingPCAndHS?ringPcAndHS=" + ringPcAndHS + "&callback=?",
+    getJSON(this.Path + "/UserPreference/SetRingPCAndHS?ringPcAndHS=" + ringPcAndHS + "&callback=?",
               function (data) {
                   //Create a nice object, and ensure its of the right type
                   var resp = new SpokesResponse(data);
